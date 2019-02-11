@@ -16,7 +16,7 @@ const initialState = {
   chains: {},
   songs: {},
   scrollInfo: {},
-  codeTab: 0,
+  codeTab: 1,
   // tutorial: {
   //   lessonIndex: 1,
   //   slideIndex: 0

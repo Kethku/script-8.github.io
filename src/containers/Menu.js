@@ -47,6 +47,7 @@ const mapDispatchToProps = dispatch => ({
   clearNextAction: () => dispatch(actions.clearNextAction()),
   fetchToken: token => dispatch(fetchToken(token)),
   newGame: screen => dispatch(actions.newGame(screen)),
+  setCodeTab: codeTab => dispatch(actions.setCodeTab(codeTab)),
   putOnShelf: ({ user, gist, cover, title, isFork }) =>
     dispatch(putOnShelf({ user, gist, cover, title, isFork })),
   saveGist: ({
@@ -85,6 +86,7 @@ class Menu extends Component {
     this.onPutOnShelfClick = this.onPutOnShelfClick.bind(this)
     this.record = this.record.bind(this)
     this.onClose = this.onClose.bind(this)
+    this.onSetCodeTab = this.onSetCodeTab.bind(this)
     window.script8.handleCode = props.fetchToken
 
     window.addEventListener('beforeunload', this.onClose)
@@ -141,6 +143,11 @@ class Menu extends Component {
     if (!dirty || areYouSure()) {
       this.props.newGame(this.props.screen)
     }
+  }
+
+  onSetCodeTab(value) {
+    const { setCodeTab } = this.props
+    setCodeTab(value)
   }
 
   onPutOnShelfClick() {
@@ -243,6 +250,7 @@ class Menu extends Component {
       sound,
       toggleSound,
       isFetching,
+      setCodeTab,
       codeTab
     } = this.props
 
@@ -387,34 +395,34 @@ class Menu extends Component {
                 active: screen === screenTypes.CODE
               })}
             >
-              <span className='full'>CODE-{codeTab}</span>
-              <span className='mid'>
+              <span className="full">CODE-{codeTab}</span>
+              <span className="mid">
                 {screen === screenTypes.CODE
                   ? `code${codeTab}`
                   : `cod${codeTab}`}
               </span>
-              <span className='small'>
+              <span className="small">
                 {screen === screenTypes.CODE
                   ? `code${codeTab}`
                   : `co${codeTab}`}
               </span>
             </button>
-            <ul className='dropdown'>
-              <li>
-                <button className='button'>CODE-0</button>
-              </li>
-
-              <li>
-                <button className='button'>CODE-1</button>
-              </li>
-
-              <li>
-                <button className='button'>CODE-2</button>
-              </li>
-
-              <li>
-                <button className='button'>CODE-3</button>
-              </li>
+            <ul className="dropdown">
+              {_.range(4).map(i => (
+                <li key={i}>
+                  <button
+                    className={classNames('button', {
+                      active: screen === screenTypes.CODE && codeTab === i
+                    })}
+                    onClick={() => {
+                      setCodeTab(i)
+                      setScreen(screenTypes.CODE)
+                    }}
+                  >
+                    CODE-{i}
+                  </button>
+                </li>
+              ))}
             </ul>
           </li>
 
